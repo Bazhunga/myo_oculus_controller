@@ -15,34 +15,8 @@ function extendUnlock()
 end
 
 function onPoseEdge(pose, edge)
-	myo.debug(pose .. ": " .. edge)
-
-	--Message Sending
-    if unlocked and pose ~= "rest" then
-    	if edge == "off" then
-    		sendMsg (pose, edge) 
-    	end
-    end
-    -- Unlock
-    if pose == "fist" then
-    	if unlocked == false then
-    		myo.debug("Unlocked!")
-    	end
-        if edge == "off" then
-            -- Actually unlock when pose is released in case the user holds it for a
-            -- while.
-            unlock()
-        elseif edge == "on" and not unlocked then
-            -- Vibrate twice on unlock.
-            -- We do this when the pose is made for better feedback.
-            myo.vibrate("short")
-            myo.vibrate("short")
-            extendUnlock()
-        end
-    end
-
-    
-   	
+	myo.debug(pose .. ": " .. edge)	
+    sendMsg (pose, edge) 
 end
 
 function onPeriodic()
@@ -60,12 +34,9 @@ function lock ()
 end
 
 function sendMsg (pose, edge)
-	unlockedSince = myo.getTimeMilliseconds()
-
 	if pose == "fist" then
-		myo.debug("You see this pose? It's the screw you pose!")
-		myo.keyboard("a", "press")
-		myo.keyboard("return","press")
+		myo.debug("Moving backwards")
+		myo.keyboard("s", "press")
 	end
 
 	--[[if pose == "fingersSpread" then
@@ -75,35 +46,33 @@ function sendMsg (pose, edge)
 	end	]]
 
 	if pose == "waveIn" then
-		--if myo.getArm() == "left" then
-			--myo.debug ("I WANN TURN RIGHT YO BEEP BEEP")
-			--myo.keyboard("b", "press")
-			--myo.keyboard("return","press")
+		if myo.getArm() == "left" then
+			myo.debug ("Go right")
+			myo.keyboard("d", "press")
+		else
+			myo.debug ("Go Left")
+			myo.keyboard("a", "press")
 		--else
 			--myo.debug("This pose indicates that I want to turn left :)")
 			--extendUnlock()
-		--end
-		myo.debug("This pose indicates that I want to turn left :)")
-		myo.keyboard("b", "press")
-		myo.keyboard("return","press")
+		end
 
 	end
 
 	if pose == "waveOut" then
-		--if myo.getArm() == "left" then
-			--myo.debug("This pose indicates that I want to turn left :)")
-			--myo.keyboard("b", "press")
-			--myo.keyboard("return","press")
+		if myo.getArm() == "left" then
+			myo.debug ("Go left")
+			myo.keyboard("a", "press")
+		else
+			myo.debug ("Go right")
+			myo.keyboard("d", "press")
+		end
 
+	end
 
-		--else
-			--myo.debug ("I WANN TURN RIGHT YO BEEP BEEP")
-
-		--end
-		myo.debug("This pose indicates that I want to turn left :)")
-		myo.keyboard("b", "press")
-		myo.keyboard("return","press")
-
+	if pose == "fingersSpread" then
+		myo.debug("Moving Forwards")
+		myo.keyboard("w", "press")
 	end
 
 	myo.vibrate("short")
